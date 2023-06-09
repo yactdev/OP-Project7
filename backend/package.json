@@ -5,15 +5,18 @@
     "helmet": "^7.0.0",
     "morgan": "^1.10.0",
     "node": "^20.2.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4"
   },
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "yactdev",
   "license": "MIT",
   "description": ""
 }
