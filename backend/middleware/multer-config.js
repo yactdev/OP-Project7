@@ -1,5 +1,5 @@
 const multer = require('multer');
-console.log(req.file);
+
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',

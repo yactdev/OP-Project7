@@ -2,9 +2,14 @@ const { Sequelize, DataTypes } = require('sequelize');
 const dotenv = require('dotenv');
 
 const db = new Sequelize(
-  process.env.DB,
-  process.env.DB_PASSWORD,
-  process.env.DB_PASSWORD,
+  'CONNECT-E',
+  'postgres',
+  'Troll007',
+  // `
+  // "${process.env.DB}",
+  // "${process.env.DB_PASSWORD}",
+  // "${process.env.DB_PASSWORD}"`,
+
   {
     host: 'localhost',
     dialect: 'postgres',
