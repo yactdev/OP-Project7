@@ -1,36 +1,34 @@
 const User = require('../models/users');
-const express = require('express');
-const { stringify } = require('qs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 
 // Create a new user
 
-exports.singUp = (req, res, next) => {
-  const url = req.protocol + '://' + req.get('host');
+exports.signUp = (req, res, next) => {
+  // const url = req.protocol + '://' + req.get('host');
 
   bcrypt.hash(req.body.password, 10).then((hash) => {
-    console.log(req.body);
     const user = {
       name: req.body.name,
       lastName: req.body.lastName,
       email: req.body.email,
       password: hash,
-      imageUrl: req.body.avatar,
+      imageUrl: req.body.imageUrl, //  url + '/images/' + req.file.filename,
       bio: req.body.bio,
     };
-
+    console.table(user);
     User.create(user)
       .then(() => {
         res.status(200).json('User has been created');
       })
       .catch((err) => {
-        res.status(401).json({ message: 'An unexpected error has occurred.' });
+        res
+          .status(401)
+          .json({ error: err, message: 'An unexpected error has occurred...' });
       });
   });
 };
-exports.singIn = async (req, res) => {
+exports.signIn = async (req, res) => {
   User.findOne({ where: { email: req.body.email } })
     .then((user) => {
       bcrypt

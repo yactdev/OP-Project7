@@ -1,8 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const dotenv = require('dotenv');
 
 const db = new Sequelize(
-  'CONNECT-E',
+  'groupmania',
   'postgres',
   'Troll007',
   // `
@@ -22,5 +21,11 @@ const db = new Sequelize(
     },
   }
 );
-
+db.authenticate()
+  .then(() => {
+    console.log('Database and tables Connected!');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 module.exports = db;
