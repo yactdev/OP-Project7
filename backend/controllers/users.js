@@ -4,20 +4,19 @@ const jwt = require('jsonwebtoken');
 
 // Create a new user
 
-exports.signUp = (req, res, next) => {
-  // const url = req.protocol + '://' + req.get('host');
-
+exports.signUp = (req, res) => {
+  console.log(req.body.email);
+  const url = req.protocol + '://' + req.get('host');
+  // console.table(url + '/images/' + req.file.filename);
   bcrypt.hash(req.body.password, 10).then((hash) => {
-    const user = {
+    User.create({
       name: req.body.name,
       lastName: req.body.lastName,
       email: req.body.email,
       password: hash,
-      imageUrl: req.body.imageUrl, //  url + '/images/' + req.file.filename,
+      imageUrl: url + '/images/' + req.file.filename,
       bio: req.body.bio,
-    };
-    console.table(user);
-    User.create(user)
+    })
       .then(() => {
         res.status(200).json('User has been created');
       })
@@ -29,6 +28,7 @@ exports.signUp = (req, res, next) => {
   });
 };
 exports.signIn = async (req, res) => {
+  console.log(req);
   User.findOne({ where: { email: req.body.email } })
     .then((user) => {
       bcrypt
@@ -62,7 +62,6 @@ exports.signIn = async (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  console.log(req.body);
   User.findAll()
     .then((data) => {
       console.table(data);
@@ -71,4 +70,16 @@ exports.findAll = (req, res) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+exports.deleteUser = (req, res) => {
+  User.destroy({
+    where: {
+      id: req.body.id,
+    },
+  }).then(() => {
+    res.status(200).json({
+      message: 'User has been deleted...',
+    });
+  });
 };

@@ -20,6 +20,11 @@ const Post = db.define('Post', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  imageUrl: {
+    type: DataTypes.STRING,
+    required: false,
+    defaultValue: null,
+  },
 });
 
 // // Define Vote model
