@@ -1,31 +1,41 @@
-const { stringify } = require('qs');
-const Posts = require('../models/posts');
-const Users = require('../models/users');
-exports.createPost = (req, res, next) => {
-  console.log('Deberia ser UserId ' + req.UserId);
-  const post = {
-    UserId: req.UserId,
-    title: req.body.title,
-    content: req.body.content,
-  };
-  console.log(req.headers);
-  console.log(req.body);
+const Post = require('../models/posts');
+const User = require('../models/users');
 
-  Posts.create(post)
+exports.createPost = (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
+
+  Post.create(
+    {
+      title: req.body.title,
+      content: req.body.content,
+      imageUrl: url + '/images/' + req.file.filename,
+      UserId: req.body.userId,
+    },
+    [
+      {
+        association: Post.belongsTo(User),
+        include: [User.hasMany(Post)],
+      },
+    ]
+  )
     .then(() => {
-      console.log(post);
+      console.log('Post has been created');
       res.status(200).json({
         message: 'The post has been created',
       });
     })
     .catch((err) => {
-      res.status(404).json({ message: err });
+      res.status(404).json({
+        message: 'Something wrong happend while update the DB',
+        error: err,
+      });
     });
 };
+
 exports.findAll = (req, res) => {
-  console.log(req.body);
-  console.log(req.UserId);
-  Posts.findAll()
+  Post.findAll({
+    include: [User],
+  })
 
     .then((data) => {
       console.log(data);
@@ -35,14 +45,15 @@ exports.findAll = (req, res) => {
       console.log(error);
     });
 };
+
 exports.allPosts = (req, res) => {
   console.log(req.UserId);
-  Posts.findAll({
-    where: { UserId: req.UserId },
+  Post.findAll({
+    where: { UserId: req.body.userId },
     include: [
       {
-        model: Users,
-        where: { id: req.UserId },
+        model: User,
+        right: true,
       },
     ],
   })
@@ -68,13 +79,57 @@ exports.allPosts = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
-  Posts.destroy({
+  Post.destroy({
     where: {
-      user_id: null,
+      id: req.params.id,
     },
-  }).then(() => {
-    res.status(200).json({
-      message: 'Posts with null user id has been deleted',
+  })
+    .then(() => {
+      res.status(200).json({
+        message: 'Posts number: ' + req.params.id + 'has been deleted',
+      });
+    })
+    .catch((err) => {
+      res.status(404).json({
+        message: 'Something wrong happend while update the DB',
+        error: err,
+      });
     });
-  });
 };
+
+exports.updatePost = (req, res) => {};
+//   const url = req.protocol + '://' + req.get('host');
+
+//   Post.findByPk(req.params.id).then((posted) => {
+//     console.log('este es Psot: ' + posted);
+//     const filename = posted.imageUrl.split('/images/')[1];
+
+//   if (req.file) {
+//     fs.unlinkSync(`images/${filename}`)
+//     .then(() => {
+//       req.body.imageUrl = url + '/images/' + req.file.filename;
+//     });
+//     console.log('Local file has been deleted sucessfuly');
+//   }
+//   }
+
+//   Post.save(
+//     {
+//       title: req.body.title,
+//       content: req.body.content,
+//       imageUrl: url + '/images/' + req.file.filename,
+//     },
+//     {
+//       where: {
+//         id: req.params.id,
+//       },
+//     }
+//   )
+//     .then((data) => {
+//       Post.afterSave();
+//       res.status(200).json(data.userId);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };

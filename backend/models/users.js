@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 const db = require('../config');
 
 const User = db.define('User', {
@@ -32,8 +32,8 @@ const User = db.define('User', {
     allowNull: false,
   },
   bio: {
-    type: Sequelize.STRING,
-    allowNull: false,
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   following: {
     type: DataTypes.STRING,

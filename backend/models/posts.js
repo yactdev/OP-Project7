@@ -20,6 +20,11 @@ const Post = db.define('Post', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  imageUrl: {
+    type: DataTypes.STRING,
+    required: false,
+    defaultValue: null,
+  },
 });
 
 // // Define Vote model
@@ -64,12 +69,5 @@ Post.belongsTo(User);
 // Vote.belongsTo(Comment, { foreignKey: 'comment_id' });
 
 // Synchronize models with database
-db.authenticate()
-  .then(() => {
-    console.log('Database and tables created!');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 module.exports = Post;

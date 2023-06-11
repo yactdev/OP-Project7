@@ -8,6 +8,8 @@ const helmet = require('helmet');
 const userRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
+const db = require('./config');
+
 dotenv.config();
 
 app.use((req, res, next) => {
@@ -22,9 +24,12 @@ app.use((req, res, next) => {
   );
   next();
 });
-
+db.sync()
+  .then(() => {})
+  .catch((err) => console.log('Error: ' + err));
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(helmet());
 app.use(morgan('tiny'));
