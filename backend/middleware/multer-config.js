@@ -9,8 +9,6 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    console.table(file);
-    console.log('ARCRIVO ' + file.mimetype);
     callback(null, 'images');
   },
   filename: (req, file, callback) => {
