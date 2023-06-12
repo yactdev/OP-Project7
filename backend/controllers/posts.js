@@ -3,7 +3,7 @@ const User = require('../models/users');
 
 exports.createPost = (req, res) => {
   const url = req.protocol + '://' + req.get('host');
-
+  console.log('este headers : ' + req.getHeaderNames());
   Post.create(
     {
       title: req.body.title,
@@ -32,18 +32,19 @@ exports.createPost = (req, res) => {
     });
 };
 
-exports.findAll = (req, res) => {
-  Post.findAll({
-    include: [User],
-  })
-
-    .then((data) => {
+exports.findAll = async (req, res) => {
+  try {
+    Post.findAll({
+      include: [User],
+    }).then((data) => {
       console.log(data);
       res.status(200).json(data);
-    })
-    .catch((error) => {
-      console.log(error);
     });
+  } catch {
+    (error) => {
+      console.log(error);
+    };
+  }
 };
 
 exports.allPosts = (req, res) => {

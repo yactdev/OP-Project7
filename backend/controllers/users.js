@@ -4,31 +4,51 @@ const jwt = require('jsonwebtoken');
 
 // Create a new user
 
-exports.signUp = (req, res) => {
-  console.log(req.body.email);
+exports.signUp = async (req, res) => {
   const url = req.protocol + '://' + req.get('host');
-  // console.table(url + '/images/' + req.file.filename);
+
   bcrypt.hash(req.body.password, 10).then((hash) => {
-    User.create({
-      name: req.body.name,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: hash,
-      imageUrl: url + '/images/' + req.file.filename,
-      bio: req.body.bio,
-    })
-      .then(() => {
-        res.status(200).json('User has been created');
+    if (req.file) {
+      User.create({
+        name: req.body.name,
+        lastName: req.body.lastname,
+        email: req.body.email,
+        password: hash,
+        imageUrl: url + '/images/' + req.file.filename,
+        bio: req.body.bio,
       })
-      .catch((err) => {
-        res
-          .status(401)
-          .json({ error: err, message: 'An unexpected error has occurred...' });
-      });
+        .then(() => {
+          res.status(200).json('User has been created');
+        })
+        .catch((err) => {
+          res.status(401).json({
+            error: err,
+            message: 'An unexpected error has occurred...',
+          });
+        });
+    } else {
+      User.create({
+        name: req.body.name,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: hash,
+        imageUrl: null,
+        bio: req.body.bio,
+      })
+        .then(() => {
+          res.status(200).json('User has been created');
+        })
+        .catch((err) => {
+          res.status(401).json({
+            error: err,
+            message: 'An unexpected error has occurred...',
+          });
+        });
+    }
   });
 };
+
 exports.signIn = async (req, res) => {
-  console.log(req);
   User.findOne({ where: { email: req.body.email } })
     .then((user) => {
       bcrypt
@@ -43,6 +63,7 @@ exports.signIn = async (req, res) => {
           const token = jwt.sign({ userid: user.id }, 'RANDOM_TOKEN_SECRET', {
             expiresIn: '24h',
           });
+
           res.status(200).json({
             userid: user.id,
             token: token,
