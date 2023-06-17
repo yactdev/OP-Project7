@@ -5,4 +5,6 @@ const commentController = require('../controllers/comment');
 
 router.get('/', auth, commentController.getComments);
 
+router.post('/', commentController.createComment);
+
 module.exports = router;

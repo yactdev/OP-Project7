@@ -11,7 +11,7 @@ exports.signUp = async (req, res) => {
     if (req.file) {
       User.create({
         name: req.body.name,
-        lastName: req.body.lastname,
+        lastName: req.body.lastName,
         email: req.body.email,
         password: hash,
         imageUrl: url + '/images/' + req.file.filename,
@@ -27,9 +27,10 @@ exports.signUp = async (req, res) => {
           });
         });
     } else {
+      console.log(req.body);
       User.create({
         name: req.body.name,
-        lastName: req.body.lastName,
+        lastName: req.lastName,
         email: req.body.email,
         password: hash,
         imageUrl: null,
@@ -96,7 +97,7 @@ exports.findAll = (req, res) => {
 exports.deleteUser = (req, res) => {
   User.destroy({
     where: {
-      id: req.body.id,
+      id: req.params.id,
     },
   }).then(() => {
     res.status(200).json({

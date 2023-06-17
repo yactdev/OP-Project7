@@ -3,7 +3,7 @@ const User = require('../models/users');
 
 exports.createPost = (req, res) => {
   const url = req.protocol + '://' + req.get('host');
-  console.log('este headers : ' + req.getHeaderNames());
+  // console.log('este headers : ' + req.getHeaderNames());
   Post.create(
     {
       title: req.body.title,
@@ -31,7 +31,24 @@ exports.createPost = (req, res) => {
       });
     });
 };
+exports.getPostById = async (req, res) => {
+  console.log(req.headers.authorization);
+  const uniquePost = await Post.findAll({
+    where: { id: req.params.id },
+    include: [
+      {
+        model: User,
+        right: true,
+      },
+    ],
+  });
 
+  if (uniquePost === null) {
+    console.log('not found');
+  } else {
+    res.status(200).json(uniquePost);
+  }
+};
 exports.findAll = async (req, res) => {
   try {
     Post.findAll({
@@ -79,8 +96,8 @@ exports.allPosts = (req, res) => {
     });
 };
 
-exports.deletePost = (req, res) => {
-  Post.destroy({
+exports.deletePost = async (req, res) => {
+  await Post.destroy({
     where: {
       id: req.params.id,
     },
@@ -98,39 +115,140 @@ exports.deletePost = (req, res) => {
     });
 };
 
-exports.updatePost = (req, res) => {};
-//   const url = req.protocol + '://' + req.get('host');
+exports.updatePost = async (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
+  try {
+    await Post.update(
+      {
+        title: req.body.title,
+        content: req.body.content,
+        imageUrl: url + '/images/' + req.file.filename,
+        UserId: req.body.userId,
+      },
 
-//   Post.findByPk(req.params.id).then((posted) => {
-//     console.log('este es Psot: ' + posted);
-//     const filename = posted.imageUrl.split('/images/')[1];
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    ).then(() => {
+      res.status(200).json('done');
+    });
+  } catch (err) {
+    res.status(404).json({
+      message: 'Something wrong happend while update the DB',
+      error: err,
+    });
+  }
+};
 
-//   if (req.file) {
-//     fs.unlinkSync(`images/${filename}`)
-//     .then(() => {
-//       req.body.imageUrl = url + '/images/' + req.file.filename;
-//     });
-//     console.log('Local file has been deleted sucessfuly');
-//   }
-//   }
+// Likes
 
-//   Post.save(
-//     {
-//       title: req.body.title,
-//       content: req.body.content,
-//       imageUrl: url + '/images/' + req.file.filename,
-//     },
-//     {
-//       where: {
-//         id: req.params.id,
-//       },
-//     }
-//   )
-//     .then((data) => {
-//       Post.afterSave();
-//       res.status(200).json(data.userId);
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
+exports.likes = async (req, res) => {
+  console.log(req.body);
+  try {
+    Post.findByPk(req.params.id).then((like) => {
+      switch (req.body.like) {
+        case 1:
+          if (!like.usersLiked.includes(req.body.UserId)) {
+            like.likes++;
+            // TODO
+            // To save an array field with Sequelize in postgres you should use this syntax...
+            like.usersLiked = [...like.usersLiked, req.body.UserId];
+
+            // Instead use  array.push
+            // like.usersLiked.push(req.body.UserId);
+
+            console.log('Likes' + like);
+          }
+
+          break;
+        case 0:
+          if (like.usersLiked.includes(req.body.UserId)) {
+            like.usersLiked.splice(like.usersLiked.indexOf(req.body.UserId, 1));
+            console.log('canceled');
+            like.likes--;
+          } else if (like.usersDisliked.includes(req.body.UserId)) {
+            like.usersDisliked.splice(
+              like.usersDisliked.indexOf(req.body.UserId, 1)
+            );
+            like.dislikes--;
+          }
+
+          break;
+        case -1:
+          if (!like.usersDisliked.includes(req.body.UserId)) {
+            like.dislikes++;
+            like.usersDisliked = [...like.usersDisliked, req.body.UserId];
+          }
+
+          // console.log('disliked');
+          break;
+
+        default:
+          break;
+      }
+      res.status(201).json(like);
+      return like.save();
+    });
+  } catch (error) {
+    console.error('Error al buscar y actualizar el registro:', error);
+  }
+  //.then((post) => {
+  //   // console.log(req.body);
+  //   switch (req.body.like) {
+  //     case 1:
+  //       console.log('Likes' + post);
+  //       if (!post.usersLiked.includes(req.body.userId)) {
+  //         post.likes++;
+  //         post.usersLiked.push(req.body.userId);
+  //       }
+
+  //       break;
+  //     case 0:
+  //       if (post.usersLiked.includes(req.body.userId)) {
+  //         post.usersLiked.splice(post.usersLiked.indexOf(req.body.userId, 1));
+  //         console.log('canceled');
+  //         post.likes--;
+  //       } else if (post.usersDisliked.includes(req.body.userId)) {
+  //         post.usersDisliked.splice(
+  //           post.usersDisliked.indexOf(req.body.userId, 1)
+  //         );
+  //         post.dislikes--;
+  //       }
+
+  //       break;
+  //     case -1:
+  //       if (!post.usersDisliked.includes(req.body.userId)) {
+  //         post.dislikes++;
+  //         post.usersDisliked.push(req.body.userId);
+  //       }
+
+  //       // console.log('disliked');
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   res.status(200).json(post);
+  // });
+};
+
+//   Post.findOne({ _id: req.params.id }).then((sauce) => {
+
+//     sauce
+//       .save()
+
+//       .then(() => {
+//         res.status(201).json({
+//           message: 'Post saved successfully!',
+//         });
+//       })
+//       .catch((error) => {
+//         res.status(400).json({
+//           error: error,
+//         });
+//       });
+//   });
 // };

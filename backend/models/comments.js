@@ -1,10 +1,11 @@
 // Define Comment model
 const { Sequelize, DataTypes } = require('sequelize');
-const db = require('../config');
 const Post = require('../models/posts');
+const User = require('../models/users');
+const db = require('../config');
 
 const Comment = db.define('Comment', {
-  comment_id: {
+  id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
@@ -14,10 +15,6 @@ const Comment = db.define('Comment', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-  },
 });
 
 Post.hasMany(Comment, {
@@ -26,7 +23,13 @@ Post.hasMany(Comment, {
     allowNull: false,
   },
 });
-
 Comment.belongsTo(Post);
+User.hasMany(Comment, {
+  foreignKey: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+});
+Comment.belongsTo(User);
 
 module.exports = Comment;
