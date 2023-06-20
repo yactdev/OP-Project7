@@ -5,9 +5,11 @@ const postsController = require('../controllers/posts');
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
-router.post('/', auth, multer, postsController.createPost);
+router.post('/', multer, postsController.createPost);
 router.get('/', postsController.findAll);
-router.get('/user/:id', auth, postsController.allPosts);
+router.get('/:id', postsController.getPostById);
 router.delete('/delete/:id', auth, postsController.deletePost);
-router.put('/update/:id', auth, multer, postsController.updatePost);
+router.put('/update/:id', multer, postsController.updatePost);
+router.post('/likes/:id', postsController.likes);
+router.post('/readby/:id', postsController.readBy);
 module.exports = router;

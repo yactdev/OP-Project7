@@ -11,7 +11,8 @@ import { ref } from "vue"
       <RouterLink active-class="active" to="/" class="menu"> Home </RouterLink>
       <RouterLink active-class="active" to="/signin" class="menu"> Sign In </RouterLink>
       <RouterLink active-class="active" to="/signup" class="menu"> Sign up </RouterLink>
-      <RouterLink active-class="active" to="/otro" class="menu"> Otro </RouterLink>
+      <RouterLink active-class="active" to="/post" class="menu"> Post </RouterLink>
+      <RouterLink active-class="active" to="/profile" class="menu"> Profile </RouterLink>
 
     </nav>
   </div>
@@ -69,6 +70,9 @@ nav {
 }
 
 .container {
+
+
+  width: 100%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   height: 70px;
   display: flex;
