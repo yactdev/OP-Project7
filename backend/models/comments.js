@@ -15,6 +15,24 @@ const Comment = db.define('Comment', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  likes: {
+    type: DataTypes.INTEGER,
+    required: false,
+    defaultValue: 0,
+  },
+  dislikes: {
+    type: DataTypes.INTEGER,
+    required: false,
+    defaultValue: 0,
+  },
+  usersLiked: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+  },
+  usersDisliked: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+  },
 });
 
 Post.hasMany(Comment, {

@@ -25,6 +25,10 @@ const Post = db.define('Post', {
     required: false,
     defaultValue: null,
   },
+  readBy: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: [],
+  },
   likes: {
     type: DataTypes.INTEGER,
     required: false,

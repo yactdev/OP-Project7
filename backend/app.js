@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-db.sync()
+db.sync({ alter: true })
   .then(() => {})
   .catch((err) => console.log('Error: ' + err));
 app.use(express.json());

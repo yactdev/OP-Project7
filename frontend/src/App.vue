@@ -70,6 +70,9 @@ nav {
 }
 
 .container {
+
+
+  width: 100%;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   height: 70px;
   display: flex;

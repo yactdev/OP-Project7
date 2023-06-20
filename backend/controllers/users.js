@@ -94,6 +94,18 @@ exports.findAll = (req, res) => {
     });
 };
 
+exports.getUserById = async (req, res) => {
+  try {
+    User.findByPk(req.params.id).then((data) => {
+      res.status(200).json(data);
+    });
+  } catch {
+    (error) => {
+      console.log(error);
+    };
+  }
+};
+
 exports.deleteUser = (req, res) => {
   User.destroy({
     where: {

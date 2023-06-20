@@ -22,7 +22,7 @@ export default {
             const formData = new FormData()
             formData.append('image', this.file)
             formData.append('name', this.name)
-            formData.append('lastname', this.lastname)
+            formData.append('lastName', this.lastname)
             formData.append('email', this.email)
             formData.append('password', this.password)
             formData.append('bio', this.bio)

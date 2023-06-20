@@ -1,63 +1,50 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import { ref, onBeforeMount } from "vue"
-import axios from 'axios';
-
-let post = ref([])
-const route = useRoute()
-const { id } = route.params
-console.log(id)
-// const allPost = []
-const auth = JSON.parse(localStorage.getItem("session"))
-console.log("token: " + auth.userid)
-const data = { "userid": auth.userid }
-const headers = { headers: { "content-type": "application/json", "Authorization": auth.token } };
-const postData = async () => {
-    try {
-        const res = await axios.get("http://localhost:3033/api/post/" + id, headers)
-        console.log("response", res.data)
-        post.value = res.data
-
-        // post.value = data.find(p => p.id == id)
-        // console.log(allPost)
+import { RouterLink, useRoute } from 'vue-router';
+import { onMounted, onBeforeMount } from 'vue';
+import PostService from '../services/PostService';
 
 
-    }
-    catch (err) {
-        // Handle errors
-        console.log(err);
-    }
-}
+const service = new PostService()
+const posts = service.getPost()
 
-postData()
+console.log("el post" + posts)
 
-
-
-
-
-
-
+onMounted(async () => {
+    const route = useRoute()
+    let elm = route.params.id
+    service.readBy(elm)
+    service.fetchPostById(elm)
+})
 
 </script>
+
 <template>
     <div>
 
     </div>
-    <h1>POST</h1>
 
-    <div class="card">
+    <div class="post-container">
 
+        <div>
+            <h3>{{ posts.title }}</h3>
+            <p>{{ posts.content }}</p>
+            <img :src="`${posts.imageUrl}`" width="400" height="400" />
+            <p>{{ posts.createdAt }}</p>
+        </div>
 
-
-
-        <!-- <a>{{ post.User.email }} </a> -->
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-
-        <img :src="`${post.imageUrl}`" width="400" height="400" />
-        <p>{{ post.createdAt }}</p>
     </div>
+
+    <div v-for="comment in posts.Comments" :key="comment.id" class="comment">
+        <div>
+
+            <img :src="`${comment.imageUrl}`" alt="Avatar" width="100" height="100">
+
+        </div>
+        <p>este {{ comment.content }}</p>
+    </div>
+    <router-link :to="{ name: 'home' }">back</router-link>
 </template>
+
 <style scoped>
 template {
     display: flex;
@@ -87,6 +74,8 @@ h3 {
 }
 
 img {
+    display: flex;
+    justify-self: left;
     object-fit: cover;
     overflow: hidden;
     width: 100%;

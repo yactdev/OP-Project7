@@ -1,9 +1,10 @@
 const Post = require('../models/posts');
 const User = require('../models/users');
+const Comment = require('../models/comments');
 
 exports.createPost = (req, res) => {
   const url = req.protocol + '://' + req.get('host');
-  // console.log('este headers : ' + req.getHeaderNames());
+
   Post.create(
     {
       title: req.body.title,
@@ -32,27 +33,25 @@ exports.createPost = (req, res) => {
     });
 };
 exports.getPostById = async (req, res) => {
-  console.log(req.headers.authorization);
-  const uniquePost = await Post.findAll({
-    where: { id: req.params.id },
-    include: [
-      {
+  try {
+    Post.findByPk(req.params.id, {
+      include: {
         model: User,
-        right: true,
+        model: Comment,
       },
-    ],
-  });
-
-  if (uniquePost === null) {
-    console.log('not found');
-  } else {
-    res.status(200).json(uniquePost);
+    }).then((data) => {
+      res.status(200).json(data);
+    });
+  } catch {
+    (error) => {
+      console.log(error);
+    };
   }
 };
 exports.findAll = async (req, res) => {
   try {
     Post.findAll({
-      include: [User],
+      include: [User, Comment],
     }).then((data) => {
       console.log(data);
       res.status(200).json(data);
@@ -62,38 +61,6 @@ exports.findAll = async (req, res) => {
       console.log(error);
     };
   }
-};
-
-exports.allPosts = (req, res) => {
-  console.log(req.UserId);
-  Post.findAll({
-    where: { UserId: req.body.userId },
-    include: [
-      {
-        model: User,
-        right: true,
-      },
-    ],
-  })
-    .then((data) => {
-      console.log(data);
-      let post = [];
-      data.forEach((element) => {
-        let userPosts = {
-          name: element.User.name,
-          title: element.title,
-          content: element.content,
-          createdAt: element.createdAt,
-        };
-        post.push(userPosts);
-      });
-      console.log(post);
-
-      res.status(200).json(post);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
 };
 
 exports.deletePost = async (req, res) => {
@@ -194,61 +161,19 @@ exports.likes = async (req, res) => {
   } catch (error) {
     console.error('Error al buscar y actualizar el registro:', error);
   }
-  //.then((post) => {
-  //   // console.log(req.body);
-  //   switch (req.body.like) {
-  //     case 1:
-  //       console.log('Likes' + post);
-  //       if (!post.usersLiked.includes(req.body.userId)) {
-  //         post.likes++;
-  //         post.usersLiked.push(req.body.userId);
-  //       }
-
-  //       break;
-  //     case 0:
-  //       if (post.usersLiked.includes(req.body.userId)) {
-  //         post.usersLiked.splice(post.usersLiked.indexOf(req.body.userId, 1));
-  //         console.log('canceled');
-  //         post.likes--;
-  //       } else if (post.usersDisliked.includes(req.body.userId)) {
-  //         post.usersDisliked.splice(
-  //           post.usersDisliked.indexOf(req.body.userId, 1)
-  //         );
-  //         post.dislikes--;
-  //       }
-
-  //       break;
-  //     case -1:
-  //       if (!post.usersDisliked.includes(req.body.userId)) {
-  //         post.dislikes++;
-  //         post.usersDisliked.push(req.body.userId);
-  //       }
-
-  //       // console.log('disliked');
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-
-  //   res.status(200).json(post);
-  // });
 };
 
-//   Post.findOne({ _id: req.params.id }).then((sauce) => {
-
-//     sauce
-//       .save()
-
-//       .then(() => {
-//         res.status(201).json({
-//           message: 'Post saved successfully!',
-//         });
-//       })
-//       .catch((error) => {
-//         res.status(400).json({
-//           error: error,
-//         });
-//       });
-//   });
-// };
+exports.readBy = async (req, res) => {
+  console.log(req.body);
+  console.log(req.params.id);
+  req.params.id;
+  try {
+    Post.findByPk(req.params.id).then((post) => {
+      if (!post.readBy.includes(req.body.userid)) {
+        post.readBy = [...post.readBy, req.body.userid];
+      }
+      res.status(201).json(post);
+      return post.save();
+    });
+  } catch {}
+};

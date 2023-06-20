@@ -4,6 +4,7 @@ import signin from '../views/signin.vue';
 import signup from '../views/SignupView.vue';
 import profile from '../views/ProfileView.vue';
 import post from '../views/PostView.vue';
+import createpost from '../views/CreatePostView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
@@ -37,7 +38,7 @@ const router = createRouter({
     {
       path: '/post',
       name: 'post',
-      component: post,
+      component: createpost,
     },
     {
       path: '/profile',

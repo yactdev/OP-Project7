@@ -1,7 +1,22 @@
 const Comment = require('../models/comments');
-
+const Post = require('../models/posts');
+const User = require('../models/users');
 exports.getComments = (req, res, next) => {
-  Comment.findAll()
+  Comment.findAll({
+    where: { id: req.body.commentId },
+    include: [
+      {
+        model: Post,
+
+        right: true,
+      },
+      {
+        model: User,
+
+        right: true,
+      },
+    ],
+  })
     .then((data) => {
       res.status(200).json(data);
     })
@@ -25,4 +40,16 @@ exports.createComment = (req, res) => {
         message: 'An unexpected error has occurred...',
       });
     });
+};
+
+exports.deleteComment = (req, res) => {
+  User.destroy({
+    where: {
+      id: req.params.id,
+    },
+  }).then(() => {
+    res.status(200).json({
+      message: 'User has been deleted...',
+    });
+  });
 };

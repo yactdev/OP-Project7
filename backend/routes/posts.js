@@ -11,4 +11,5 @@ router.get('/:id', postsController.getPostById);
 router.delete('/delete/:id', auth, postsController.deletePost);
 router.put('/update/:id', multer, postsController.updatePost);
 router.post('/likes/:id', postsController.likes);
+router.post('/readby/:id', postsController.readBy);
 module.exports = router;
