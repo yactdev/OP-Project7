@@ -1,20 +1,27 @@
 <template>
-    <div v-for="post in posts" :key="post.id" class="card" @click="router.push(`/post/${post.id}`)">
+    <div class="post-list">
 
-        <div class="post-user">
+        <div v-for="post in posts" :key="post.id" class="card" @click="router.push(`/post/${post.id}`)">
 
-            <img class="avatar" :src="`${post.User.imageUrl}`" width="50" height="50" />
-            <p> {{ post.User.name }}</p>
-            <p> {{ post.User.lastName }}</p>
+            <div class="post-user">
+
+                <li> <img class="avatar" :src="`${post.User.imageUrl}`" width="50" height="50" /></li>
+                <li> {{ post.User.name }} {{ post.User.lastName }}</li>
+
+
+            </div>
+            <div class="post-list">
+                <li>
+                    <h2>{{ post.title }}</h2>
+                </li>
+                <li>
+                    <p>{{ post.content }}</p>
+                </li>
+                <li> <img :src="`${post.imageUrl}`" width="400" height="400" /></li>
+                <li>{{ post.createdAt }}</li>
+            </div>
 
         </div>
-        <div class="post-list">
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <img :src="`${post.imageUrl}`" width="400" height="400" />
-            <p>{{ post.createdAt }}</p>
-        </div>
-
 
     </div>
 </template>
@@ -30,7 +37,7 @@ const router = useRouter()
 const service = new PostService()
 const posts = service.getPosts()
 
-onMounted(() => {
+onMounted(async () => {
 
     service.fetchAllPosts()
 })
@@ -38,53 +45,46 @@ onMounted(() => {
 </script>
 
 <style  scoped>
-template {
-    text-decoration: none;
+.post-user {
+    margin-bottom: 10px;
     display: flex;
-    justify-content: center;
-    background-color: rgb(60, 60, 139);
-    ;
+    align-items: center;
+    gap: 10px;
 
+}
+
+.post-user li {
+    list-style: none;
+}
+
+.post-user li img {
+
+    border-radius: 50%;
 }
 
 .card {
-    padding: 10px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    border-style: solid black;
+    width: 100%;
 
+    padding: 20px;
 
-
-    align-content: center;
-
+    box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);
+    -webkit-box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);
+    -moz-box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);
 }
 
-h3 {
-    display: flex;
-    justify-content: center;
+.card li {
+    list-style: none;
 }
-
-.avatar {
-    border-radius: 50%;
-    object-fit: fill;
-}
-
-
 
 .post-list {
-    gap: 10px;
-    display: flex;
-    justify-content: left;
-
+    width: 100%;
 }
 
 .post-list img {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 250px;
+    max-height: 250px;
 
-    object-fit: cover;
-    overflow: hidden;
-
-    align-self: left;
 }
 </style>

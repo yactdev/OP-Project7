@@ -18,12 +18,13 @@ class UserService {
   }
   async fetchAllUsers() {
     try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
       // Simple GET request using axios
       const headers = {
         headers: {
+          Accept: 'aplication/json',
           'content-type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyNTQ0NTY4Ny1mMTNlLTQxYTktOTZjYy1kMDE0NmU0Y2I1NGMiLCJpYXQiOjE2ODY0NTk3NTMsImV4cCI6MTY4NjU0NjE1M30.izQuWw25PRhOwceUErL1ACNzZIdhfbsM8ESks3Lt6Ko',
+          Authorization: `Bearer ${storage.token} `,
         },
       };
       await axios
@@ -47,11 +48,11 @@ class UserService {
       // Simple GET request using axios
       const headers = {
         headers: {
+          Accept: 'aplication/json',
           'content-type': 'application/json',
-          Authorization: `${storage.token}`,
+          Authorization: `Bearer ${storage.token} `,
         },
       };
-
       await axios
         .get(`http://localhost:3033/api/users/${id}`, headers)
 

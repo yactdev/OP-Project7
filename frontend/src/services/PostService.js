@@ -18,19 +18,19 @@ class PostService {
   }
   async fetchAllPosts() {
     try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
       // Simple GET request using axios
       const headers = {
         headers: {
+          Accept: 'aplication/json',
           'content-type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyNTQ0NTY4Ny1mMTNlLTQxYTktOTZjYy1kMDE0NmU0Y2I1NGMiLCJpYXQiOjE2ODY0NTk3NTMsImV4cCI6MTY4NjU0NjE1M30.izQuWw25PRhOwceUErL1ACNzZIdhfbsM8ESks3Lt6Ko',
+          Authorization: `Bearer ${storage.token} `,
         },
       };
       await axios
         .get('http://localhost:3033/api/post', headers)
 
         .then((response) => {
-          //   this.posts.value = response.data;
           localStorage.setItem('data', JSON.stringify(response.data));
           this.#posts.value = response.data;
           console.log(response.data);
@@ -42,12 +42,13 @@ class PostService {
 
   async fetchPostById(id) {
     try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
       // Simple GET request using axios
       const headers = {
         headers: {
+          Accept: 'aplication/json',
           'content-type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyNTQ0NTY4Ny1mMTNlLTQxYTktOTZjYy1kMDE0NmU0Y2I1NGMiLCJpYXQiOjE2ODY0NTk3NTMsImV4cCI6MTY4NjU0NjE1M30.izQuWw25PRhOwceUErL1ACNzZIdhfbsM8ESks3Lt6Ko',
+          Authorization: `Bearer ${storage.token} `,
         },
       };
       console.log(id);
@@ -71,11 +72,12 @@ class PostService {
       // Simple GET request using axios
       const headers = {
         headers: {
-          'content-type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyNTQ0NTY4Ny1mMTNlLTQxYTktOTZjYy1kMDE0NmU0Y2I1NGMiLCJpYXQiOjE2ODY0NTk3NTMsImV4cCI6MTY4NjU0NjE1M30.izQuWw25PRhOwceUErL1ACNzZIdhfbsM8ESks3Lt6Ko',
+          'Content-Type': 'multipart/form-data',
+          Accept: 'aplication/json',
+          Authorization: `Bearer ${storage.token} `,
         },
       };
+
       console.log(id);
       await axios
         .post(
