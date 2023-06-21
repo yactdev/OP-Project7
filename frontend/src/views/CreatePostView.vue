@@ -9,4 +9,4 @@ import { RouterLink } from 'vue-router';
 import CreatePostComponnet from '../components/CreatePostComponnet.vue';
 </script>
 
-<style  scoped></style>
+<style scoped></style>

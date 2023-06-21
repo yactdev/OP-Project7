@@ -15,8 +15,11 @@ export default {
     },
     methods: {
         handleFileUpload(event) {
-            console.log(event)
+
             this.file = event.target.files[0];
+            const selectedFile = ImageUrlfile.files
+            const ImageUrlObject = URL.createObjectURL(event.target.files[0])
+            imagePreview.src = ImageUrlObject
         },
         submitForm() {
             const formData = new FormData()
@@ -79,9 +82,12 @@ export default {
                 <label for="password">Contraseña:</label>
                 <input type="password" id="password" v-model="password" required>
             </div>
+            <div> <img id="imagePreview"></div>
+
+
             <div>
                 <label for="image">Avatar:</label>
-                <input type="file" name="file" accept="image/*" @change="handleFileUpload">
+                <input id="ImageUrlfile" type="file" name="file" accept="image/*" @change="handleFileUpload">
             </div>
             <div>
                 <label for="bio">Bio:</label>

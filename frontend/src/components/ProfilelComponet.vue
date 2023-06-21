@@ -1,7 +1,9 @@
 <script setup>
+import axios from 'axios';
 import { RouterLink, useRouter } from 'vue-router';
-import { onMounted, onBeforeMount } from 'vue';
+import { onMounted, onBeforeMount, ref } from 'vue';
 import UserService from '../services/UserService';
+
 
 
 
@@ -9,9 +11,43 @@ const router = useRouter()
 const service = new UserService()
 const user = service.getUser()
 
+const deleteUser = async () => {
 
 
 
+    try {
+        const storage = await JSON.parse(localStorage.getItem('session'));
+
+        const headers = {
+            headers: {
+                Accept: 'aplication/json',
+                'content-type': 'application/json',
+                Authorization: `Bearer ${storage.token} `,
+            },
+        };
+        await
+            axios.delete(`http://localhost:3033/api/users/delete/${storage.userid}`, headers)
+
+                .then(() => {
+                    //   this.posts.vareturnlue = response.data;
+
+                    console.log("User deleted")
+                });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const updateUser = async () => {
+    alert("User Updated")
+}
+
+let name = ref('')
+let lastName = ref('')
+let email = ref('')
+let password = ref('')
+let bio = ref('')
 
 onBeforeMount(async () => {
 
@@ -48,7 +84,10 @@ onBeforeMount(async () => {
             <label for="bio">Bio:</label>
             <input type="text" id="bio" v-model="user.bio">
         </div>
-        <button type="submit">Update</button> <button type="submit">Close account</button>
+        <button type="submit" @click="updateUser">Update
+        </button>
+        <button type="submit" @click="deleteUser">Delete account
+        </button>
     </form>
 
     <!-- <p>{{ user.content }}</p>
