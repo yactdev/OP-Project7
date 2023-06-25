@@ -5,7 +5,7 @@ import signup from '../views/SignupView.vue';
 import profile from '../views/ProfileView.vue';
 import post from '../views/PostView.vue';
 import createpost from '../views/CreatePostView.vue';
-
+import comment from '../views/CommentView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes: [
@@ -56,6 +56,14 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: profile,
+      meta: {
+        authRequired: true,
+      },
+    },
+    {
+      path: '/comment',
+      name: 'comment',
+      component: comment,
       meta: {
         authRequired: true,
       },

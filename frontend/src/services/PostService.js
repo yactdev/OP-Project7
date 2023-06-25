@@ -4,10 +4,12 @@ import { ref } from 'vue';
 class PostService {
   #posts;
   #post;
+  #commented;
 
   constructor() {
     this.#posts = ref([]);
     this.#post = ref([]);
+    this.#commented = ref([]);
   }
 
   getPosts() {
@@ -15,6 +17,9 @@ class PostService {
   }
   getPost() {
     return this.#post;
+  }
+  getComments() {
+    return this.#commented;
   }
   async fetchAllPosts() {
     try {
@@ -116,5 +121,57 @@ class PostService {
       console.log(error);
     }
   }
+  async Comment(body) {
+    try {
+      const storage = JSON.parse(localStorage.getItem('session'));
+
+      // Simple GET request using axios
+      const headers = {
+        headers: {
+          Accept: 'aplication/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${storage.token} `,
+        },
+      };
+
+      await axios
+        .post(`http://localhost:3033/api/comment/`, body, headers)
+
+        .then(() => {
+          console.log('commentadded');
+        });
+    } catch (error) {
+      console.log('API Error ');
+    }
+  }
+
+  async fetchComment(id) {
+    try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
+      // Simple GET request using axios
+
+      const headers = {
+        headers: {
+          Accept: 'aplication/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${storage.token} `,
+        },
+      };
+      console.log(id);
+
+      await axios
+        .get(`http://localhost:3033/api/comment/${id}`, headers)
+
+        .then((response) => {
+          //   this.posts.value = response.data;
+
+          this.#commented.value = response.data;
+          console.log(response.data);
+        });
+    } catch (error) {
+      console.log('API Error ');
+    }
+  }
 }
+
 export default PostService;

@@ -23,10 +23,10 @@
                 </div>
             </div>
         </div> -->
-        <PostDetail v-for="post in posts" :key="post.id" class="card" @click="router.push(`/post/${post.id}`)"
-            :title="post.title" :content="post.content" :imageUrl="post.imageUrl" :createdAt="post.createdAt"
-            :user="post.User.name" :userImage="`${post.User.imageUrl}`" :lastName="post.User.lastName"
-            :readby="post.readBy" />
+        <PostDetail :class="{ 'read': readBy }" v-for="post in posts" :key="post.id" class="card" :title="post.title"
+            @click="router.push(`/post/${post.id}`)" :content="post.content" :imageUrl="post.imageUrl"
+            :createdAt="post.createdAt" :user="post.User.name" :userImage="`${post.User.imageUrl}`"
+            :lastName="post.User.lastName" :readby="post.readBy" />
     </div>
 </template>
 
@@ -37,7 +37,7 @@ import PostService from '../services/PostService';
 import { useRouter } from 'vue-router';
 import PostDetail from './PostDetail.vue';
 
-
+const readBy = true
 
 // const activeClass = ref('exist')
 
@@ -56,10 +56,6 @@ onBeforeMount(async () => {
 </script>
 
 <style  >
-.read {
-    background-color: rgb(178, 178, 192);
-}
-
 .post-user {
     margin-bottom: 10px;
     display: flex;
@@ -101,5 +97,9 @@ li {
     max-width: 250px;
     max-height: 250px;
 
+}
+
+.read {
+    background-color: rgb(178, 178, 192);
 }
 </style>

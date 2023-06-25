@@ -36,10 +36,7 @@ exports.createPost = async (req, res) => {
 exports.getPostById = async (req, res) => {
   try {
     Post.findByPk(req.params.id, {
-      include: {
-        model: User,
-        model: Comment,
-      },
+      include: [User, Comment],
     }).then((data) => {
       res.status(200).json(data);
     });

@@ -1,19 +1,18 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router';
-import { onMounted, ref, onBeforeMount, computed } from 'vue';
+import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue';
 import PostService from '../services/PostService';
 
-const read = ref(true)
 const props = defineProps(
     {
         title: String,
         content: String,
         imageUrl: String,
-        createdAt: Date,
+        createdAt: String,
         user: String,
         userImage: String,
-        lastname: String,
-        readBy: Array
+        lastName: String,
+        readby: Array
     })
 // const commentClick = () => {
 //     // emit('comment', message.value)
@@ -32,33 +31,43 @@ const props = defineProps(
 //     service.fetchPostById(elm)
 //     service.readBy(elm)
 //})
-const exist = computed(async () => {
-    if (!props.readBy) {
+const storage = JSON.parse(localStorage.getItem('session'))
+const id = storage.userid
+console.log("este es el " + props.readby.length)
 
-        read = false
-    } else {
+// console.log("READBTY" + props.readBy)
+// const readBy = reactive({
+//     name: 'John Doe',
+//     books: [
+//         'Vue 2 - Advanced Guide',
+//         'Vue 3 - Basic Guide',
+//         '1c38f354-8038-4c9d-9c3a-7363d3a738ed'
+//     ]
+// })
+// const elementRead = computed(() => {
 
-
-        const storage = JSON.parse(localStorage.getItem('session'))
-        const id = storage.userid
-        console.log("Este es el ID: " + id)
-        console.log(props)
-        exist = props.readBy.includes(id)
-    }
-})
+//     return readBy.includes(id)
+// }
+//     //     const storage = JSON.parse(localStorage.getItem('session'))
+//     //     const id = storage.userid
+//     //     console.log("Este es el ID: " + id)
+//     //     console.log(props)
+//     //     exist = props.readBy.includes(id)
+//     // }
+// )
 
 onBeforeMount(async () => {
-    exist
+
 })
 </script>
 
-<template :title="props.title" :imageUrl="props.imageUrl">
+<template >
     <div class="post-user">
-        <div class="post-container">
-            <div :class="{ 'read': { read } }">
+        <div>
+            <div>
                 <li> <img class="avatar" :src="`${props.userImage}`" width="50" height="50" /></li>
                 <li> {{ props.user }} {{ props.lastName }}</li>
-                {{ props.readBy }}
+
 
 
             </div>
@@ -67,6 +76,7 @@ onBeforeMount(async () => {
                 <p>{{ props.content }}</p>
                 <img :src="`${props.imageUrl}`" width="400" height="400" />
                 <p>{{ props.createdAt }}</p>
+
             </div>
 
         </div>
@@ -106,10 +116,5 @@ img {
     object-fit: cover;
     overflow: hidden;
 
-}
-
-
-.read {
-    background-color: rgb(178, 178, 192);
 }
 </style>

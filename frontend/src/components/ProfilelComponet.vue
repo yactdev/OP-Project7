@@ -84,7 +84,8 @@ onBeforeMount(async () => {
         </div>
         <div>
             <label for="bio">Bio:</label>
-            <input type="text" id="bio" v-model="user.bio">
+            <textarea name="" id="bio" v-model="user.bio" cols="30" rows="10"></textarea>
+
         </div>
         <button type="submit" @click="updateUser">Update
         </button>

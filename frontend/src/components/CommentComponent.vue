@@ -1,26 +1,31 @@
 <template>
-    <div v-for="comment in posts.Comments" :key="comment.id" class="comment">
-        <div>
+    <div class="commemt">
 
-            <img :src="`${comment.imageUrl}`" alt="Avatar" width="100" height="100">
+        <textarea v-model="comment" name="comment" id="" cols="30" rows="10" placeholder="Leave your comment"></textarea>
+        <button @click="handleSend">send</button>
 
-        </div>
-        <p>este {{ comment.content }}</p>
+        <h1>sdfsdf{{ comment }}</h1>
     </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from 'vue';
-const emit = defineEmits('comment')
-const props = defineProps({ 'title', 'content', })
+import { ref, defineEmits, defineProps } from 'vue';
 
+const emit = defineEmits(["sendComment"])
+const comment = ref('')
 
-const commentClick = () => {
-    emit('comment', message.value)
+const handleSend = () => {
+
+    emit("sendComment", comment.value)
 }
 
-
-let message = ref('')
+// const body =
+// {
+//     "content": comment.value,
+//     "Userid": storage.userid,
+//     "PostId": post.id,
+// };
+// console.log(body)
 </script>
 
 <style  scoped></style>
