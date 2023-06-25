@@ -62,8 +62,6 @@ class PostService {
         .get(`http://localhost:3033/api/post/${id}`, headers)
 
         .then((response) => {
-          //   this.posts.value = response.data;
-
           this.#post.value = response.data;
           console.log(response.data);
         });
@@ -112,10 +110,7 @@ class PostService {
         .post(`http://localhost:3033/api/post`, body, headers)
 
         .then(() => {
-          //   this.posts.value = response.data;
           console.log('The post has been created');
-          // this.#posts.value = response.data;
-          // console.log('byI : ' + JSON.parse(response.data));
         });
     } catch (error) {
       console.log(error);
@@ -163,8 +158,6 @@ class PostService {
         .get(`http://localhost:3033/api/comment/${id}`, headers)
 
         .then((response) => {
-          //   this.posts.value = response.data;
-
           this.#commented.value = response.data;
           console.log(response.data);
         });

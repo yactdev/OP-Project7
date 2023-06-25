@@ -31,8 +31,6 @@ class UserService {
         .get('http://localhost:3033//api/users/', headers)
 
         .then((response) => {
-          //   this.posts.value = response.data;
-
           this.#users.value = response.data;
           console.log(response.data);
         });
@@ -57,8 +55,6 @@ class UserService {
         .get(`http://localhost:3033/api/users/${id}`, headers)
 
         .then((response) => {
-          //   this.posts.value = response.data;
-
           this.#user.value = response.data;
         });
     } catch (error) {

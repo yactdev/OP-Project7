@@ -14,47 +14,16 @@ const props = defineProps(
         lastName: String,
         readby: Array
     })
-// const commentClick = () => {
-//     // emit('comment', message.value)
-// }
+const commentClick = () => {
+    // emit('comment', message.value)
+}
 
 
-//let message = ref('')
-// const service = new PostService()
-// const posts = service.getPost()
 
-
-// onMounted(async () => {
-//     const route = useRoute()
-//     let elm = route.params.id
-
-//     service.fetchPostById(elm)
-//     service.readBy(elm)
-//})
 const storage = JSON.parse(localStorage.getItem('session'))
 const id = storage.userid
 console.log("este es el " + props.readby.length)
 
-// console.log("READBTY" + props.readBy)
-// const readBy = reactive({
-//     name: 'John Doe',
-//     books: [
-//         'Vue 2 - Advanced Guide',
-//         'Vue 3 - Basic Guide',
-//         '1c38f354-8038-4c9d-9c3a-7363d3a738ed'
-//     ]
-// })
-// const elementRead = computed(() => {
-
-//     return readBy.includes(id)
-// }
-//     //     const storage = JSON.parse(localStorage.getItem('session'))
-//     //     const id = storage.userid
-//     //     console.log("Este es el ID: " + id)
-//     //     console.log(props)
-//     //     exist = props.readBy.includes(id)
-//     // }
-// )
 
 onBeforeMount(async () => {
 
