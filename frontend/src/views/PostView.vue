@@ -1,7 +1,8 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router';
-import { onMounted, onBeforeMount } from 'vue';
+import { onMounted, ref, onBeforeMount, defineProps, defineEmits } from 'vue';
 import PostService from '../services/PostService';
+import PostDetail from '../components/PostDetail.vue';
 
 
 const service = new PostService()
@@ -16,32 +17,23 @@ onMounted(async () => {
     service.fetchPostById(elm)
 })
 
+
 </script>
-
 <template>
-    <div>
-
-    </div>
-
     <div class="post-container">
-
         <div>
             <h3>{{ posts.title }}</h3>
             <p>{{ posts.content }}</p>
             <img :src="`${posts.imageUrl}`" width="400" height="400" />
             <p>{{ posts.createdAt }}</p>
+            <button>comment</button>
         </div>
-
     </div>
 
-    <div v-for="comment in posts.Comments" :key="comment.id" class="comment">
-        <div>
 
-            <img :src="`${comment.imageUrl}`" alt="Avatar" width="100" height="100">
 
-        </div>
-        <p>este {{ comment.content }}</p>
-    </div>
+
+
     <router-link :to="{ name: 'home' }">back</router-link>
 </template>
 

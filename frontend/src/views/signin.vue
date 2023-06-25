@@ -1,37 +1,41 @@
-<script >
+<script setup>
+
 import axios from 'axios'
-export default {
+import { ref } from 'vue';
 
-  data() {
-    return {
+import { routeLocationKey, useRoute, useRouter } from 'vue-router'
 
-      email: '',
-      password: ''
-    }
+const router = useRouter()
+const email = ref('')
+const password = ref('')
+
+
+function submitForm() {
+
+  const data = {
+    "email": email.value,
+    "password": password.value
+  };
+  try {
+    //   console.log(data)
+    axios.post('http://localhost:3033/api/users/signin', data
+    )
+      .then(response => {
+
+        localStorage.setItem("session", JSON.stringify(response.data));
+
+        // redirect to the home page
+
+        router.push('/')
+
+      })
   }
-  ,
-  methods: {
-    submitForm(event) {
-      event.preventDefault()
-      const data = {
-        "email": this.email,
-        "password": this.password
-      };
-      console.log(data)
-      axios.post('http://localhost:3033/api/users/signin', data
-      )
-        .then(response => {
-          console.log("el usuarui es: " + response.data.userid)
-          console.log("El Token es: " + response.data.token)
-          localStorage.setItem("session", JSON.stringify(response.data));
-        })
-        .catch(error => {
-          console.log('An error has been occured')
-        });
-    }
-  }
-
+  catch (error) {
+    console.log('An error has been occured')
+  };
 }
+
+
 
 </script>
 
@@ -40,7 +44,7 @@ export default {
     <img src="../assets/img/icon-above-font.svg" alt="" width="500" height="600">
 
 
-    <form @submit="submitForm">
+    <form @submit.prevent="submitForm">
       <label for="username">Email:</label>
       <input type="email" v-model="email" placeholder="Please enter your email address">
 
@@ -50,7 +54,9 @@ export default {
       <button @click="submitForm">Sign In</button>
 
       <div class="register-link">
-        ¿Do not have an account? <a href="#">SignUp</a>
+        ¿Do not have an account?
+        <router-link :to="{ name: 'signup' }">SignUp</router-link>
+
       </div>
     </form>
   </div>

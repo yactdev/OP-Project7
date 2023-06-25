@@ -13,6 +13,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: home,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/signin',
@@ -28,23 +31,46 @@ const router = createRouter({
       path: '/profile/:id',
       name: 'profileId',
       component: profile,
+      meta: {
+        authRequired: true,
+      },
     },
 
     {
       path: '/post/:id',
       name: 'postId',
       component: post,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/post',
       name: 'post',
       component: createpost,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/profile',
       name: 'profile',
       component: profile,
+      meta: {
+        authRequired: true,
+      },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const auth = localStorage.getItem('session') != null;
+  const needAuth = to.meta.authRequired;
+
+  if (needAuth && !auth) {
+    next('signin');
+  } else {
+    next();
+  }
 });
 export default router;

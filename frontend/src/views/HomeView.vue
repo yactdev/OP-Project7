@@ -1,10 +1,10 @@
 <script setup>
-import PostCardComponent from '../components/PostCardComponent.vue';
+import PostList from '../components/PostList.vue';
 </script>
 
 
 <template>
-  <PostCardComponent />
+  <PostList />
 </template>
 
     
@@ -38,8 +38,7 @@ h3 {
 }
 
 img {
-  display: flex;
-  align-content: flex-start;
+
   object-fit: cover;
   overflow: hidden;
 
