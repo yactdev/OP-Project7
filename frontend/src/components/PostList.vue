@@ -23,18 +23,21 @@
                 </div>
             </div>
         </div> -->
-        <PostView v-for="post in posts" :key="post.id" class="card" title="post.title" content="post.content"
-            imageUrl="post.imageUrl" createdAt="post.createAt" />
+        <PostDetail :class="{ 'read': readBy }" v-for="post in posts" :key="post.id" class="card" :title="post.title"
+            @click="router.push(`/post/${post.id}`)" :content="post.content" :imageUrl="post.imageUrl"
+            :createdAt="post.createdAt" :user="post.User.name" :userImage="`${post.User.imageUrl}`"
+            :lastName="post.User.lastName" :readby="post.readBy" />
     </div>
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount, onMounted, ref, computed } from 'vue';
+
 import PostService from '../services/PostService';
 import { useRouter } from 'vue-router';
-import PostView from "../views/ProfileView.vue"
+import PostDetail from './PostDetail.vue';
 
-
+const readBy = true
 
 // const activeClass = ref('exist')
 
@@ -43,7 +46,6 @@ const router = useRouter()
 const service = new PostService()
 const posts = service.getPosts()
 
-console.log(posts)
 
 onBeforeMount(async () => {
 
@@ -53,11 +55,7 @@ onBeforeMount(async () => {
 
 </script>
 
-<style  scoped>
-.read {
-    background-color: rgb(178, 178, 192);
-}
-
+<style  >
 .post-user {
     margin-bottom: 10px;
     display: flex;
@@ -85,7 +83,7 @@ onBeforeMount(async () => {
     -moz-box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);
 }
 
-.card li {
+li {
     list-style: none;
 }
 
@@ -99,5 +97,9 @@ onBeforeMount(async () => {
     max-width: 250px;
     max-height: 250px;
 
+}
+
+.read {
+    background-color: rgb(178, 178, 192);
 }
 </style>

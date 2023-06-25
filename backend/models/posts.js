@@ -54,6 +54,9 @@ User.hasMany(Post, {
   foreignKey: {
     type: DataTypes.UUID,
     allowNull: false,
+
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
   },
 });
 Post.belongsTo(User);

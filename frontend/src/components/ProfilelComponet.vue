@@ -7,6 +7,7 @@ import UserService from '../services/UserService';
 
 
 
+
 const router = useRouter()
 const service = new UserService()
 const user = service.getUser()
@@ -30,8 +31,9 @@ const deleteUser = async () => {
 
                 .then(() => {
                     //   this.posts.vareturnlue = response.data;
-
+                    localStorage.removeItem("session");
                     console.log("User deleted")
+                    router.push("/")
                 });
     } catch (error) {
         console.log(error);
@@ -82,20 +84,22 @@ onBeforeMount(async () => {
         </div>
         <div>
             <label for="bio">Bio:</label>
-            <input type="text" id="bio" v-model="user.bio">
+            <textarea name="" id="bio" v-model="user.bio" cols="30" rows="10"></textarea>
+
         </div>
         <button type="submit" @click="updateUser">Update
         </button>
         <button type="submit" @click="deleteUser">Delete account
         </button>
     </form>
-
+    <router-link :to="{ name: 'home' }">back</router-link>
     <!-- <p>{{ user.content }}</p>
         <img :src="`${user.imageUrl}`" width="400" height="400" />
         <p>{{ user.createdAt }}</p> --> -->
 
     <!-- </div> -->
 </template>
+
 <style scoped>
 img {
 

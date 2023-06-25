@@ -5,20 +5,7 @@ import UserService from '../services/UserService';
 
 import ProfileComponet from '../components/ProfilelComponet.vue'
 
-// const router = useRouter()
-// const service = new UserService()
-// const user = service.getUser()
-// const users = service.getUsers()
 
-
-
-
-// onBeforeMount(async () => {
-
-//     const storage = JSON.parse(localStorage.getItem("session"))
-//     service.fetchUserById(storage.userid)
-
-// })
 
 
 </script>

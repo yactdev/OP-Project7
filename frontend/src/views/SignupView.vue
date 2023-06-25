@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 export default {
 
     data() {
@@ -36,7 +38,10 @@ export default {
             const headers = { headers: { 'Content-Type': 'multipart/form-data' } }
             axios.post('http://localhost:3033/api/users/signup', formData, headers)
 
-                .then(() => { console.log(formData) })
+                .then(() => {
+                    console.log(formData)
+                    this.$router.push('/')
+                })
                 .catch((error) => {
                     // res.status(500).json({
                     //     error: error,
@@ -45,6 +50,7 @@ export default {
             // Aquí puedes realizar acciones adicionales, como enviar los datos al servidor
             // y manejar la imagen del avatar
             console.log('Datos enviados:');
+
         }
     }
 };
@@ -91,7 +97,7 @@ export default {
             </div>
             <div>
                 <label for="bio">Bio:</label>
-                <input type="text" id="bio" v-model="bio">
+                <textarea name="" id="bio" v-model="bio" cols="30" rows="10"></textarea>
             </div>
             <button type="submit">Sign in</button>
         </form>

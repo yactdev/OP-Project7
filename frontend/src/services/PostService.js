@@ -4,10 +4,12 @@ import { ref } from 'vue';
 class PostService {
   #posts;
   #post;
+  #commented;
 
   constructor() {
     this.#posts = ref([]);
     this.#post = ref([]);
+    this.#commented = ref([]);
   }
 
   getPosts() {
@@ -15,6 +17,9 @@ class PostService {
   }
   getPost() {
     return this.#post;
+  }
+  getComments() {
+    return this.#commented;
   }
   async fetchAllPosts() {
     try {
@@ -69,62 +74,104 @@ class PostService {
   async readBy(id) {
     try {
       const storage = JSON.parse(localStorage.getItem('session'));
+
       // Simple GET request using axios
       const headers = {
         headers: {
-          'Content-Type': 'multipart/form-data',
           Accept: 'aplication/json',
+          'content-type': 'application/json',
           Authorization: `Bearer ${storage.token} `,
         },
       };
-
+      const body = { userid: storage.userid };
       console.log(id);
+
       await axios
-        .post(
-          `http://localhost:3033/api/post/`,
-          { userid: storage.userid },
-          headers
-        )
+        .post(`http://localhost:3033/api/post/readby/${id}`, body, headers)
 
         .then(() => {
-          //   this.posts.value = response.data;
           console.log('User added');
-          // this.#posts.value = response.data;
-          // console.log('byI : ' + JSON.parse(response.data));
         });
     } catch (error) {
       console.log('API Error ');
     }
   }
 
-  async createPost(id) {
+  async newPost(body) {
     try {
-      const storage = JSON.parse(localStorage.getItem('session'));
+      const storage = await JSON.parse(localStorage.getItem('session'));
       // Simple GET request using axios
       const headers = {
         headers: {
-          'content-type': 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIyNTQ0NTY4Ny1mMTNlLTQxYTktOTZjYy1kMDE0NmU0Y2I1NGMiLCJpYXQiOjE2ODY0NTk3NTMsImV4cCI6MTY4NjU0NjE1M30.izQuWw25PRhOwceUErL1ACNzZIdhfbsM8ESks3Lt6Ko',
+          Accept: 'aplication/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${storage.token} `,
         },
       };
-      console.log(id);
       await axios
-        .post(
-          `http://localhost:3033/api/post/readby/${id}`,
-          { userid: storage.userid },
-          headers
-        )
+        .post(`http://localhost:3033/api/post`, body, headers)
 
         .then(() => {
           //   this.posts.value = response.data;
-          console.log('User added');
+          console.log('The post has been created');
           // this.#posts.value = response.data;
           // console.log('byI : ' + JSON.parse(response.data));
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async Comment(body) {
+    try {
+      const storage = JSON.parse(localStorage.getItem('session'));
+
+      // Simple GET request using axios
+      const headers = {
+        headers: {
+          Accept: 'aplication/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${storage.token} `,
+        },
+      };
+
+      await axios
+        .post(`http://localhost:3033/api/comment/`, body, headers)
+
+        .then(() => {
+          console.log('commentadded');
+        });
+    } catch (error) {
+      console.log('API Error ');
+    }
+  }
+
+  async fetchComment(id) {
+    try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
+      // Simple GET request using axios
+
+      const headers = {
+        headers: {
+          Accept: 'aplication/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${storage.token} `,
+        },
+      };
+      console.log(id);
+
+      await axios
+        .get(`http://localhost:3033/api/comment/${id}`, headers)
+
+        .then((response) => {
+          //   this.posts.value = response.data;
+
+          this.#commented.value = response.data;
+          console.log(response.data);
         });
     } catch (error) {
       console.log('API Error ');
     }
   }
 }
+
 export default PostService;

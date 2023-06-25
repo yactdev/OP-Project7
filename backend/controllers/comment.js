@@ -3,19 +3,8 @@ const Post = require('../models/posts');
 const User = require('../models/users');
 exports.getComments = (req, res, next) => {
   Comment.findAll({
-    where: { id: req.body.commentId },
-    include: [
-      {
-        model: Post,
-
-        right: true,
-      },
-      {
-        model: User,
-
-        right: true,
-      },
-    ],
+    where: { PostId: req.params.id },
+    include: [Post, User],
   })
     .then((data) => {
       res.status(200).json(data);

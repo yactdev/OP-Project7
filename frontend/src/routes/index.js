@@ -5,7 +5,7 @@ import signup from '../views/SignupView.vue';
 import profile from '../views/ProfileView.vue';
 import post from '../views/PostView.vue';
 import createpost from '../views/CreatePostView.vue';
-
+import comment from '../views/CommentView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes: [
@@ -13,6 +13,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: home,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/signin',
@@ -28,23 +31,54 @@ const router = createRouter({
       path: '/profile/:id',
       name: 'profileId',
       component: profile,
+      meta: {
+        authRequired: true,
+      },
     },
 
     {
       path: '/post/:id',
       name: 'postId',
       component: post,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/post',
       name: 'post',
       component: createpost,
+      meta: {
+        authRequired: true,
+      },
     },
     {
       path: '/profile',
       name: 'profile',
       component: profile,
+      meta: {
+        authRequired: true,
+      },
+    },
+    {
+      path: '/comment',
+      name: 'comment',
+      component: comment,
+      meta: {
+        authRequired: true,
+      },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const auth = localStorage.getItem('session') != null;
+  const needAuth = to.meta.authRequired;
+
+  if (needAuth && !auth) {
+    next('signin');
+  } else {
+    next();
+  }
 });
 export default router;
