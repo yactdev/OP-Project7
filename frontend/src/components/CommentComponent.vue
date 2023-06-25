@@ -19,13 +19,7 @@ const handleSend = () => {
     emit("sendComment", comment.value)
 }
 
-// const body =
-// {
-//     "content": comment.value,
-//     "Userid": storage.userid,
-//     "PostId": post.id,
-// };
-// console.log(body)
+
 </script>
 
 <style  scoped></style>

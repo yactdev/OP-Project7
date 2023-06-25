@@ -30,7 +30,7 @@ const deleteUser = async () => {
             axios.delete(`http://localhost:3033/api/users/delete/${storage.userid}`, headers)
 
                 .then(() => {
-                    //   this.posts.vareturnlue = response.data;
+
                     localStorage.removeItem("session");
                     console.log("User deleted")
                     router.push("/")
@@ -93,11 +93,6 @@ onBeforeMount(async () => {
         </button>
     </form>
     <router-link :to="{ name: 'home' }">back</router-link>
-    <!-- <p>{{ user.content }}</p>
-        <img :src="`${user.imageUrl}`" width="400" height="400" />
-        <p>{{ user.createdAt }}</p> --> -->
-
-    <!-- </div> -->
 </template>
 
 <style scoped>

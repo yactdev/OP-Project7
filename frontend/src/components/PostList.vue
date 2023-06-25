@@ -1,28 +1,6 @@
 <template>
     <div class="post-list">
-        <!-- 
-        <div v-for="post in posts" :key="post.id" class="card" @click="router.push(`/post/${post.id}`)">
-            <div :class="{ 'read': exist }">
-                <div class="post-user">
 
-                    <li> <img class="avatar" :src="`${post.User.imageUrl}`" width="50" height="50" /></li>
-                    <li> {{ post.User.name }} {{ post.User.lastName }}</li>
-
-
-                </div>
-                <div class="post-list">
-                    <li>
-                        <h2>{{ post.title }}</h2>
-                    </li>
-                    <li>
-                        <p>{{ post.content }}</p>
-                    </li>
-                    <li> <img :src="`${post.imageUrl}`" width="400" height="400" /></li>
-                    <li>{{ post.createdAt }}</li>
-                    <li>Read by {{ post.readBy }}</li>
-                </div>
-            </div>
-        </div> -->
         <PostDetail :class="{ 'read': readBy }" v-for="post in posts" :key="post.id" class="card" :title="post.title"
             @click="router.push(`/post/${post.id}`)" :content="post.content" :imageUrl="post.imageUrl"
             :createdAt="post.createdAt" :user="post.User.name" :userImage="`${post.User.imageUrl}`"

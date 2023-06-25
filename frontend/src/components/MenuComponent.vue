@@ -36,9 +36,6 @@ const check = async () => {
 
         </nav>
     </div>
-
-
-    <!-- <UserProfileCard /> -->
 </template>
 <style>
 .menu {
