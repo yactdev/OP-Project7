@@ -1,25 +1,28 @@
 <script setup>
 import { RouterLink, useRouter, useRoute } from 'vue-router';
-import { onMounted, ref, onBeforeMount, defineProps, defineEmits } from 'vue';
+import { onMounted, ref } from 'vue';
 import PostService from '../services/PostService';
-import PostDetail from '../components/PostDetail.vue';
+
 import CreateComment from '../components/CommentComponent.vue'
 
 const router = useRouter()
 const service = new PostService()
 const posts = service.getPost()
+
 const commented = service.getComments()
 const comments = ref(false)
-console.log("el post" + posts)
+
+
 const route = useRoute()
 let elm = route.params.id
+
 
 onMounted(async () => {
 
     service.readBy(elm)
     service.fetchPostById(elm)
     service.fetchComment(elm)
-    console.log("aja post" + posts)
+
 })
 
 function processComment(content) {
@@ -39,6 +42,10 @@ function processComment(content) {
 </script>
 <template>
     <div class="post-container">
+
+        <div class="user-info">
+
+        </div>
         <div>
             <h3>{{ posts.title }}</h3>
             <p>{{ posts.content }}</p>
@@ -47,10 +54,7 @@ function processComment(content) {
             <button @click="comments = !comments">comment</button>
         </div>
     </div>
-    <!-- <div v-for="read in posts.readBy :key"></div>
-    <div v-if="'${!posts.readBy}'">
-        prueba {{ $ }}
-    </div> -->
+
     <CreateComment v-if="comments" @sendComment="processComment" />
 
     <div class="comments">
@@ -102,7 +106,8 @@ template {
     border-style: solid;
     border-radius: 10px;
     border-width: 1px;
-    margin: 5px
+    margin: 5px;
+    min-height: 100px;
 }
 
 .user-info {

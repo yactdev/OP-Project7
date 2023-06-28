@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { ref } from 'vue';
 
-import { routeLocationKey, useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const email = ref('')
@@ -17,7 +17,7 @@ function submitForm() {
     "password": password.value
   };
   try {
-    //   console.log(data)
+
     axios.post('http://localhost:3033/api/users/signin', data
     )
       .then(response => {

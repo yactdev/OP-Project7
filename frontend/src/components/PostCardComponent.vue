@@ -14,7 +14,7 @@ import PostView from "../views/ProfileView.vue"
 
 
 
-// const activeClass = ref('exist')
+
 
 const storage = localStorage.getItem('session');
 const router = useRouter()

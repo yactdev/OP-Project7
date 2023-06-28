@@ -1,7 +1,7 @@
 <template>
     <div class="post-list">
 
-        <PostDetail :class="{ 'read': readBy }" v-for="post in posts" :key="post.id" class="card" :title="post.title"
+        <PostDetail v-for="post in posts" :key="post.id" class="card" :title="post.title"
             @click="router.push(`/post/${post.id}`)" :content="post.content" :imageUrl="post.imageUrl"
             :createdAt="post.createdAt" :user="post.User.name" :userImage="`${post.User.imageUrl}`"
             :lastName="post.User.lastName" :readby="post.readBy" />
@@ -9,27 +9,33 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, ref, computed } from 'vue';
+import { onBeforeMount } from 'vue';
 
 import PostService from '../services/PostService';
 import { useRouter } from 'vue-router';
 import PostDetail from './PostDetail.vue';
 
-const readBy = true
 
-// const activeClass = ref('exist')
 
-const storage = localStorage.getItem('session');
+
+
+
+const storage = JSON.parse(localStorage.getItem('session'));
 const router = useRouter()
 const service = new PostService()
 const posts = service.getPosts()
 
 
+
 onBeforeMount(async () => {
+
 
     service.fetchAllPosts()
 
+
 })
+
+
 
 </script>
 
@@ -53,8 +59,8 @@ onBeforeMount(async () => {
 
 .card {
     width: 100%;
-
-    padding: 20px;
+    margin: 0;
+    padding: 20px 0px;
 
     box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);
     -webkit-box-shadow: -4px 10px 39px -4px rgba(0, 0, 0, 0.63);

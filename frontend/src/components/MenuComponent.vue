@@ -1,38 +1,39 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { RouterView, RouterLink, onBeforeRouteUpdate, useRouter } from "vue-router"
+import { RouterLink, useRouter } from "vue-router"
 
 const router = useRouter()
 
-const logged = ref(true)
-
+let logged = false
 function logout() {
 
     localStorage.removeItem("session")
     router.push('signin')
 }
-const check = async () => {
-    const storage = JSON.parse(localStorage.getItem('session'))
-    if (storage === null) {
-        console.log("booo " + logged + storage)
-        logged = { logged }
+
+const storage = JSON.parse(localStorage.getItem('session'))
+async function check() {
+
+    if (storage.userid) {
+
+        logged = !logged
+
     }
 }
 
 
-
 </script>
 
-<template  @change="check">
-    <div class="container">
+<template >
+    <div @change="check" class="container">
         <img class="logo" src="../assets/img/icon-left-font.svg" alt="logo" width="200" height="60">
         <nav>
             <RouterLink active-class="active" to="/" class="menu"> Home </RouterLink>
-            <RouterLink active-class="active" to="/signin" class="menu"> Sign In </RouterLink>
+            <RouterLink v-if="logged" active-class="active" to="/signin" class="menu"> Sign In </RouterLink>
 
-            <RouterLink active-class="active" to="/post" class="menu"> Post </RouterLink>
-            <RouterLink v-if="logged" active-class="active" to="/profile" class="menu"> Profile </RouterLink>
-            <button v-if="logged" @click="logout">Logout</button>
+            <RouterLink v-if="!logged" active-class="active" to="/post" class="menu"> Post </RouterLink>
+            <RouterLink v-if="!logged" active-class="active" to="/profile" class="menu"> Profile </RouterLink>
+            <button v-if="!logged" @click="logout">Logout</button>
 
         </nav>
     </div>

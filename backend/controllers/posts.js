@@ -169,10 +169,26 @@ exports.readBy = async (req, res) => {
   try {
     Post.findByPk(req.params.id).then((post) => {
       if (!post.readBy.includes(req.body.userId)) {
-        post.readBy = [...post.readBy, req.body.userid];
+        post.readBy = [...post.readBy, req.body.userId];
       }
-      res.status(201).json(post);
+      res.status(200).json(post);
       return post.save();
     });
   } catch {}
+};
+
+exports.uniqueReadBy = async (req, res) => {
+  try {
+    Post.findByPk(req.params.id, {
+      include: [User],
+      attributes: ['readBy'],
+    }).then((data) => {
+      console.log(data);
+      res.status(200).json(data);
+    });
+  } catch {
+    (error) => {
+      console.log(error);
+    };
+  }
 };

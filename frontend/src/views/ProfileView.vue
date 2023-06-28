@@ -1,7 +1,5 @@
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
-import { onMounted, onBeforeMount } from 'vue';
-import UserService from '../services/UserService';
+
 
 import ProfileComponet from '../components/ProfilelComponet.vue'
 

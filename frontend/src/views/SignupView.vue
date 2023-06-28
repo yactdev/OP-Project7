@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-const router = useRouter()
+
 export default {
 
     data() {
@@ -39,6 +39,7 @@ export default {
             axios.post('http://localhost:3033/api/users/signup', formData, headers)
 
                 .then(() => {
+                    const router = useRouter()
                     console.log(formData)
                     this.$router.push('/')
                 })

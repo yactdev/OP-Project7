@@ -22,32 +22,38 @@ const commentClick = () => {
 
 const storage = JSON.parse(localStorage.getItem('session'))
 const id = storage.userid
-console.log("este es el " + props.readby.length)
+const readBy = ref()
+console.log("este es el     " + props.readby)
+console.log(readBy)
+readBy.value = props.readby.includes(id)
 
+onMounted(async () => {
 
-onBeforeMount(async () => {
+}
+)
 
-})
 </script>
 
 <template >
-    <div class="post-user">
-        <div>
+    <div :class="{ 'read': !readBy }">
+        <div class="post-user">
             <div>
-                <li> <img class="avatar" :src="`${props.userImage}`" width="50" height="50" /></li>
-                <li> {{ props.user }} {{ props.lastName }}</li>
+                <div>
+                    <li> <img class="avatar" :src="`${props.userImage}`" width="50" height="50" /></li>
+                    <li> {{ props.user }} {{ props.lastName }}</li>
 
 
+
+                </div>
+                <div>
+                    <h3>{{ props.title }}</h3>
+                    <p>{{ props.content }}</p>
+                    <img :src="`${props.imageUrl}`" width="400" height="400" />
+                    <p>{{ props.createdAt }}</p>
+
+                </div>
 
             </div>
-            <div>
-                <h3>{{ props.title }}</h3>
-                <p>{{ props.content }}</p>
-                <img :src="`${props.imageUrl}`" width="400" height="400" />
-                <p>{{ props.createdAt }}</p>
-
-            </div>
-
         </div>
     </div>
 </template>
@@ -85,5 +91,9 @@ img {
     object-fit: cover;
     overflow: hidden;
 
+}
+
+.read {
+    background-color: rgb(178, 178, 192);
 }
 </style>
