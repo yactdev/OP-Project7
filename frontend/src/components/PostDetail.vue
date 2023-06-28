@@ -23,8 +23,7 @@ const commentClick = () => {
 const storage = JSON.parse(localStorage.getItem('session'))
 const id = storage.userid
 const readBy = ref()
-console.log("este es el     " + props.readby)
-console.log(readBy)
+
 readBy.value = props.readby.includes(id)
 
 onMounted(async () => {

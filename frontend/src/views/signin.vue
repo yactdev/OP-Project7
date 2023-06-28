@@ -8,32 +8,55 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const email = ref('')
 const password = ref('')
+const message = ref('')
+
+async function submitForm() {
+
+  if (validarEmail(email.value) && password.value) {
+    const data = {
+      "email": email.value,
+      "password": password.value
+    };
+    try {
+
+      axios.post('http://localhost:3033/api/users/signin', data
+      )
+        .then(response => {
 
 
-function submitForm() {
+          console.log("estatus: " + response.status)
+          // redirect to the home page
+          if (response.status === 200) {
+            localStorage.setItem("session", JSON.stringify(response.data));
+            router.push('/')
 
-  const data = {
-    "email": email.value,
-    "password": password.value
-  };
-  try {
+          } else {
+            message.value = "Unautirized... Please check your email and password"
+          }
+        })
+    }
+    catch (error) {
+      message.value = "Please check your email and password"
+    };
 
-    axios.post('http://localhost:3033/api/users/signin', data
-    )
-      .then(response => {
-
-        localStorage.setItem("session", JSON.stringify(response.data));
-
-        // redirect to the home page
-
-        router.push('/')
-
-      })
   }
-  catch (error) {
-    console.log('An error has been occured')
-  };
 }
+const validarEmail = (email) => {
+  // Expresión regular para validar el formato del email
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const result = regex.test(email)
+
+  if (result) {
+    message.value = "Please check yout email an password"
+  } else {
+    message.value = "Please check yout email an password"
+
+  }
+  return result
+}
+
+
+
 
 
 
@@ -49,8 +72,8 @@ function submitForm() {
       <input type="email" v-model="email" placeholder="Please enter your email address">
 
       <label for="password">Password:</label>
-      <input type="password" v-model="password" placeholder="Enter your password">
-
+      <input type="password" v-model="password" placeholder="Enter your password" @change="validarEmail">
+      <span>{{ message }}</span>
       <button @click="submitForm">Sign In</button>
 
       <div class="register-link">
@@ -114,5 +137,9 @@ function submitForm() {
 
 .container .register-link {
   text-align: center;
+}
+
+span {
+  color: red
 }
 </style>
