@@ -5,11 +5,13 @@ class PostService {
   #posts;
   #post;
   #commented;
+  #urb;
 
   constructor() {
-    this.#posts = ref([]);
+    this.#posts = ref();
     this.#post = ref([]);
     this.#commented = ref([]);
+    this.#urb = ref();
   }
 
   getPosts() {
@@ -20,6 +22,9 @@ class PostService {
   }
   getComments() {
     return this.#commented;
+  }
+  getUrb() {
+    return this.#urb;
   }
   async fetchAllPosts() {
     try {
@@ -81,7 +86,7 @@ class PostService {
           Authorization: `Bearer ${storage.token} `,
         },
       };
-      const body = { userid: storage.userid };
+      const body = { userId: storage.userid };
       console.log(id);
 
       await axios
@@ -91,7 +96,7 @@ class PostService {
           console.log('User added');
         });
     } catch (error) {
-      console.log('API Error ');
+      console.log('API Error ' + error);
     }
   }
 
@@ -160,6 +165,31 @@ class PostService {
         .then((response) => {
           this.#commented.value = response.data;
           console.log(response.data);
+        });
+    } catch (error) {
+      console.log('API Error ');
+    }
+  }
+
+  async urb(id) {
+    try {
+      const storage = await JSON.parse(localStorage.getItem('session'));
+      // Simple GET request using axios
+      const headers = {
+        headers: {
+          Accept: 'aplication/json',
+          'content-type': 'application/json',
+          Authorization: `Bearer ${storage.token} `,
+        },
+      };
+      console.log(id);
+
+      await axios
+        .get(`http://localhost:3033/api/post/urb/${id}`, headers)
+
+        .then((response) => {
+          this.#urb.value = response.data;
+          console.log(response.statusText);
         });
     } catch (error) {
       console.log('API Error ');

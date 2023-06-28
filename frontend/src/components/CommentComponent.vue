@@ -4,7 +4,7 @@
         <textarea v-model="comment" name="comment" id="" cols="30" rows="10" placeholder="Leave your comment"></textarea>
         <button @click="handleSend">send</button>
 
-        <h1>sdfsdf{{ comment }}</h1>
+
     </div>
 </template>
 
