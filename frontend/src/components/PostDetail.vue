@@ -37,7 +37,7 @@ onMounted(async () => {
     <div :class="{ 'read': !readBy }">
         <div class="post-user">
             <div>
-                <div>
+                <div class="user">
                     <li> <img class="avatar" :src="`${props.userImage}`" width="50" height="50" /></li>
                     <li> {{ props.user }} {{ props.lastName }}</li>
 
@@ -64,6 +64,12 @@ template {
     background-color: rgb(60, 60, 139);
     ;
 
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .card {
